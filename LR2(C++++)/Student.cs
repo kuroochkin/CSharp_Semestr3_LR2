@@ -1,0 +1,117 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.Serialization.Formatters;
+using System.Collections;
+
+namespace LR2
+{
+    public class Student : Person, IDateAndCopy
+    {
+        private Person student;
+        private Education formeducation;
+        private int NumberGroup;
+        private ArrayList tests = new ArrayList();
+        private ArrayList exams = new ArrayList();
+
+        public Student(Person student, Education formeducation, int numberGroup)
+        {
+            this.student = student;
+            this.formeducation = formeducation;
+            this.NumberGroup = numberGroup;
+        }
+        public Student()
+        {
+            this.student = new Person();
+            this.formeducation = Education.Bachelor;
+            this.NumberGroup = 21;
+        }
+
+        public Person Datastudent
+        {
+            get { return student; }
+            set { student = value; }
+        }
+
+        public Education Dataeducation
+        {
+            get { return formeducation; }
+            set { formeducation = value; }
+        }
+
+        public int DataGroup
+        {
+            get { return NumberGroup; }
+            set
+            {
+                if (value <= 100 || value > 599)
+                {
+                    throw new ArgumentOutOfRangeException("Ошибка! Значение группы лежит в пределах от 100 до 599.");
+                }
+                NumberGroup = value;
+            }
+        }
+
+        public ArrayList Dataexams
+        {
+            get { return exams; }
+            set { exams = value; }
+        }
+
+        public double Average
+        {
+            get
+            {
+                double sum = 0;
+
+                foreach (Exam item in exams)
+                {
+                    sum += item.Grade;
+                }
+                return sum / exams.Count;
+            }
+        }
+
+        public bool this[Education index]
+        {
+            get
+            {
+                if (this.formeducation == index)
+                    return true;
+                return false;
+            }
+        }
+
+        public void AddExams(Exam exam) => exams.Add(exam);
+
+        public void AddTests(Test test) => tests.Add(test);
+
+        public override object DeepCopy()
+        {
+            var student = new Student(this.student, this.formeducation, this.NumberGroup);
+
+            foreach (Exam item in this.exams)
+            {
+                student.AddExams(item);
+            }
+            foreach (Test item in this.tests)
+            {
+                student.AddTests(item);
+            }
+            return student;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}", student, formeducation, NumberGroup);
+        }
+
+        public virtual string ToShortString()
+        {
+            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}\nСредний балл: {3}", student, formeducation, NumberGroup, Average);
+        }
+    }
+}
