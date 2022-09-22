@@ -103,6 +103,24 @@ namespace LR2
             }
             return student;
         }
+        public IEnumerable GetResults()
+        {
+            foreach (var exam in exams)
+                yield return exam;
+            foreach (var test in tests)
+                yield return test;
+        }
+
+        public IEnumerable ExamFilter(int grade)
+        {
+            foreach(var exam in exams)
+            {
+                Exam ex = (Exam)exam;
+                if (ex.Grade > grade)
+                    yield return exam;
+            }
+        }
+
 
         public override string ToString()
         {
