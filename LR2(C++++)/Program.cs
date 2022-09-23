@@ -33,3 +33,9 @@ catch (ArgumentOutOfRangeException e)
 {
     Console.WriteLine(e.Message);
 }
+
+foreach (var item in student1.GetResults())
+    Console.WriteLine(item.ToString());
+
+foreach (var item in student1.ExamsFilter(3))
+    Console.WriteLine(item.ToString());

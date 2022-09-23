@@ -24,7 +24,10 @@ namespace LR2
         }
         public override string ToString()
         {
-            return string.Format("Предмет для зачета:  = {0}, Сдан и ли нет: = {1}", Subject, Passed);
+            string text = "Не сдано";
+            if (Passed == true)
+                text = "Сдано";
+            return string.Format("Зачет: {0}, Сдан и ли нет: {1}", Subject, text);
         }
     }
 }
