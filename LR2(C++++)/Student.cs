@@ -111,7 +111,7 @@ namespace LR2
                 yield return test;
         }
 
-        public IEnumerable ExamFilter(int grade)
+        public IEnumerable ExamsFilter(int grade)
         {
             foreach(var exam in exams)
             {
