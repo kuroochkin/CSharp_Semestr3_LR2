@@ -17,17 +17,14 @@ namespace LR2
             this.Subject = subject;
             this.Passed = passed;
         }
-        public Test()
-        {
-            Subject = "Физика";
-            Passed = false;
-        }
+        public Test() { Subject = "Физика"; Passed = false; }
+       
         public override string ToString()
         {
-            string text = "Не сдано";
+            string text = "(Не сдано)";
             if (Passed == true)
-                text = "Сдано";
-            return string.Format("Зачет: {0}, Сдан и ли нет: {1}", Subject, text);
+                text = "(Сдано)";
+            return string.Format("Предмет: {0}{1}", Subject, text);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace LR2
             if (obj == null)
                 return false;
             
-            Person temp = obj as Person;
+            Person? temp = obj as Person;
             if (temp == null)
             {
                 return false;
@@ -96,7 +96,7 @@ namespace LR2
 
         public override string ToString()
         {
-            return string.Format("{0} {1}\nДата рождения: {2}", name, surname, datetime);
+            return string.Format("Фамилия: {0}\nИмя: {1}\nДата рождения: {2}", name, surname, datetime);
         }
 
         public virtual string ToShortString()

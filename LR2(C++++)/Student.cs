@@ -124,10 +124,20 @@ namespace LR2
 
         public override string ToString()
         {
-            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}", student, formeducation, NumberGroup);
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("{0}\nНомер группы: {1}\nФорма обучения: {2}\n", base.ToString(), NumberGroup, formeducation);
+            
+            builder.Append("Экзамены:\n");
+            foreach (Exam exam in exams)
+                builder.AppendLine(exam.ToString());
+            
+            builder.Append("Зачеты:\n");
+            foreach (Test test in tests)
+                builder.AppendLine(test.ToString());
+            return builder.ToString();
         }
 
-        public virtual string ToShortString()
+        public override string ToShortString()
         {
             return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}\nСредний балл: {3}", student, formeducation, NumberGroup, Average);
         }

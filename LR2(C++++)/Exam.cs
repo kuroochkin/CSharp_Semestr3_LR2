@@ -13,11 +13,12 @@ namespace LR2
         Bachelor,
         SecondEducation
     }
-    public class Exam
+    public class Exam : IDateAndCopy
     {
         public string Subject { get; set; }
         public int Grade { get; set; }
         public DateTime Datetime { get; set; }
+        public DateTime Date { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Exam(string subject, int grade, DateTime datetime)
         {
@@ -31,6 +32,11 @@ namespace LR2
         public override string ToString()
         {
             return string.Format("Предмет: {0} Оценка: {1}. Дата экзамена: {2}", Subject, Grade, Datetime);
+        }
+
+        public object DeepCopy()
+        {
+            throw new NotImplementedException();
         }
     }
 }
