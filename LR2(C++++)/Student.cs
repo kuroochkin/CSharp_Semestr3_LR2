@@ -9,13 +9,14 @@ using System.Collections;
 
 namespace LR2
 {
+    delegate TKey KeySelector<TKey>(Student st);
     public class Student : Person, IDateAndCopy
     {
         private Person student;
         private Education formeducation;
         private int NumberGroup;
-        private ArrayList tests = new ArrayList();
-        private ArrayList exams = new ArrayList();
+        private List<Test> tests = new List<Test>();
+        private List<Exam> exams = new List<Exam>();
 
         public Student(Person student, Education formeducation, int numberGroup)
         {
@@ -55,7 +56,7 @@ namespace LR2
             }
         }
 
-        public ArrayList Dataexams
+        public List<Exam> Dataexams
         {
             get { return exams; }
             set { exams = value; }
