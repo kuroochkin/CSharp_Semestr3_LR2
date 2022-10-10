@@ -22,9 +22,9 @@ namespace LR2
 
         public Person()
         {
-            name = "Владислав";
-            surname = "Курочкин";
-            datetime = new DateTime(2003, 6, 19);
+            this.name = "Владислав";
+            this.surname = "Курочкин";
+            this.datetime = new DateTime(2003, 6, 19);
         }
 
         public string Name
@@ -96,12 +96,12 @@ namespace LR2
 
         public override string ToString()
         {
-            return string.Format("Фамилия: {0}\nИмя: {1}\nДата рождения: {2}", name, surname, datetime);
+            return string.Format("Фамилия: {0}\nИмя: {1}\nДата рождения: {2}",  Name, Surname, Datetime);
         }
 
         public virtual string ToShortString()
         {
-            return "\n" + "Имя: " + name + "\n" + "Фамилия: " + surname;
+            return "\n" + "Имя: " + Name + "\n" + "Фамилия: " + Surname;
         }
     }
 }

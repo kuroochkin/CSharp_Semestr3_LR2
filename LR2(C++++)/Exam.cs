@@ -40,8 +40,10 @@ namespace LR2
 
         public int CompareTo(object? subject)
         {
-            if (subject is null) throw new ArgumentException("Некорректное значение параметра");
-            return Subject.CompareTo(subject);
+            Exam exam = subject as Exam;
+            if (subject == null) throw new ArgumentException("Некорректное значение параметра");
+            else
+                return Subject.CompareTo(subject);
         }
 
         public int Compare(Exam? grade1, Exam? grade2)

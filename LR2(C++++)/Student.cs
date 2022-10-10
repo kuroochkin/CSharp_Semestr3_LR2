@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters;
 using System.Collections;
+using System.Xml.Linq;
+using LR2_C_____;
 
 namespace LR2
 {
-    delegate TKey KeySelector<TKey>(Student st);
-    public class Student : Person, IDateAndCopy
+    public delegate TKey KeySelector<TKey>(Student st);
+    public class Student : Person, IDateAndCopy, IComparable
     {
         private Person student;
         private Education formeducation;
@@ -18,17 +20,17 @@ namespace LR2
         private List<Test> tests = new List<Test>();
         private List<Exam> exams = new List<Exam>();
 
-        public Student(Person student, Education formeducation, int numberGroup)
-        {
-            this.student = student;
-            this.formeducation = formeducation;
-            this.NumberGroup = numberGroup;
-        }
         public Student()
         {
             this.student = new Person();
             this.formeducation = Education.Bachelor;
             this.NumberGroup = 21;
+        }
+        public Student(Person student, Education formeducation, int numberGroup)
+        {
+            this.student = student;
+            this.formeducation = formeducation;
+            this.NumberGroup = numberGroup;
         }
 
         public Person Datastudent
@@ -122,11 +124,33 @@ namespace LR2
             }
         }
 
+        public int CompareTo(object? ExamSubject)
+        {
+            if (ExamSubject is null) throw new ArgumentException("Некорректное значение параметра");
+            return this.CompareTo(ExamSubject);
+        }
+
+        public void SortExamsByName()
+        {
+            exams.Sort();
+        }
+
+        public void SortExamsByGrade()
+        {
+            exams.Sort(new Exam());
+        }
+
+        public void SortExamsByDate()
+        {
+            exams.Sort(new ExamHelper());
+        }
+
 
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("{0}\nНомер группы: {1}\nФорма обучения: {2}\n", base.ToString(), NumberGroup, formeducation);
+            
+            builder.AppendFormat("{0}\nНомер группы: {1}\nФорма обучения: {2}\n", Datastudent, NumberGroup, formeducation);
             
             builder.Append("Экзамены:\n");
             foreach (Exam exam in exams)
@@ -140,7 +164,9 @@ namespace LR2
 
         public override string ToShortString()
         {
-            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}\nСредний балл: {3}", student, formeducation, NumberGroup, Average);
+            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}\nСредний балл: {3}", Datastudent, formeducation, NumberGroup, Average);
         }
+
+        
     }
 }
