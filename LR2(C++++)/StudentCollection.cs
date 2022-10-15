@@ -1,9 +1,13 @@
 ﻿using LR2;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LR2_C_____
 {
@@ -22,25 +26,68 @@ namespace LR2_C_____
         
         public void AddDefaults()
         {
-            var stud = new StudentCollection<string>(GiveKey);
-            Person person1 = new Person("Влад", "Курочкин", new DateTime(2003, 06, 19));
-            Student student1 = new Student(person1, Education.Bachelor, 100);
-            var student2 = new Student(new Person("Максим", "Ярочевский", new DateTime(2002, 06, 19)), Education.Bachelor, 101);
-           
+            Student student1 = new Student(new Person("Самофеева", "Анна", new DateTime(2002, 04, 06)), Education.Bachelor, 100);
+            Student student2 = new Student(new Person("Аверина", "Софья", new DateTime(2002, 03, 05)), Education.Bachelor, 101);
+
+
             this.students.Add(keySelector(student1), student1);
-            this.students.Add(keySelector(student2), student2);
+            this.students.Add(keySelector(student2), student2);         
+        }
 
-
-
-            foreach (var item in students)
+        public void AddStudents(params Student[] _students)
+        {
+            foreach(Student item in _students)
             {
-                Console.WriteLine($"key: {item.Key}\n  value:\n {item.Value}");
+                students.Add(keySelector(item),item);
             }
         }
+
+        public double MaxAverage
+        {
+            get
+            {
+                if (students.Count == 0) return -1;
+                return students.Max(student => student.Value.Average);
+            }
+        }
+
+        //public IEnumerable<IGrouping<Education, KeyValuePair<TKey, Student>>> GroupFormEducation
+        //{
+        //    get
+        //    {
+
+        //    }
+        //}
+
+        public IEnumerable<KeyValuePair<TKey, Student>> EducationForm(Education value)
+        {
+            return students.Where(student => student.Value.Dataeducation == value);
+        }
+
 
         public static string GiveKey(Student st)
         {
             return st.Datastudent.Surname + " " + st.Datastudent.Name;
         }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            
+            foreach (KeyValuePair<TKey, Student> item in students)
+            {
+                builder.AppendLine("---------------------");
+                builder.AppendFormat("{0}\nНомер группы: {1}\nФорма обучения: {2}\n", item.Value.Datastudent, item.Value.DataGroup, item.Value.Dataeducation);
+
+                builder.Append("Экзамены:\n");
+                foreach (Exam exam in item.Value.Dataexams)
+                    builder.AppendLine(exam.ToString());
+
+                builder.Append("Зачеты:\n");
+                foreach (Test test in item.Value.Datatests)
+                    builder.AppendLine(test.ToString());
+            }
+            return builder.ToString();
+        }  
     }
 }

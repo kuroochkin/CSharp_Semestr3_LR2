@@ -14,7 +14,6 @@ namespace LR2
     public delegate TKey KeySelector<TKey>(Student st);
     public class Student : Person, IDateAndCopy, IComparable
     {
-        private Person student;
         private Education formeducation;
         private int NumberGroup;
         private List<Test> tests = new List<Test>();
@@ -22,21 +21,35 @@ namespace LR2
 
         public Student()
         {
-            this.student = new Person();
+            var st = new Person();
+            this.name = st.Name;
+            this.surname = st.Surname;
+            this.datetime = st.Datetime;
             this.formeducation = Education.Bachelor;
             this.NumberGroup = 21;
         }
         public Student(Person student, Education formeducation, int numberGroup)
         {
-            this.student = student;
+            this.name = student.Name;
+            this.surname = student.Surname;
+            this.datetime = student.Datetime;
             this.formeducation = formeducation;
             this.NumberGroup = numberGroup;
         }
 
         public Person Datastudent
         {
-            get { return student; }
-            set { student = value; }
+            get
+            {
+                Person person = new Person(this.name, this.surname, this.datetime);
+                return person;
+            }
+
+            set
+            {
+                Person person = new Person(this.name, this.surname, this.datetime);
+                person = value;
+            }
         }
 
         public Education Dataeducation
@@ -64,6 +77,12 @@ namespace LR2
             set { exams = value; }
         }
 
+        public List<Test> Datatests
+        {
+            get { return tests; }
+            set { tests = value; }
+        }
+
         public double Average
         {
             get
@@ -78,23 +97,29 @@ namespace LR2
             }
         }
 
+       
+
         public bool this[Education index]
         {
             get
             {
-                if (this.formeducation == index)
-                    return true;
-                return false;
+                return this.formeducation == index;
             }
         }
 
-        public void AddExams(Exam exam) => exams.Add(exam);
+        public void AddExams(params Exam[] exam)
+        {
+            foreach(Exam item in exam)
+            {
+                exams.Add(item);
+            }
+        }
 
         public void AddTests(Test test) => tests.Add(test);
 
         public override object DeepCopy()
         {
-            var student = new Student(this.student, this.formeducation, this.NumberGroup);
+            var student = new Student(new Person(this.name, this.surname, this.datetime), this.formeducation, this.NumberGroup);
 
             foreach (Exam item in this.exams)
             {
@@ -145,8 +170,15 @@ namespace LR2
             exams.Sort(new ExamHelper());
         }
 
+        public void PrintExam()
+        {
+            foreach (Exam exam in this.Dataexams)
+            {
+                Console.WriteLine(exam.ToString());
+            }
+        }
 
-        public override string ToString()
+    public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
             

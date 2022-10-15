@@ -38,18 +38,20 @@ namespace LR2
             return new Exam(this.Subject, this.Grade, this.Date);
         }
 
+
         public int CompareTo(object? subject)
         {
             Exam exam = subject as Exam;
-            if (subject == null) throw new ArgumentException("Некорректное значение параметра");
+            if (subject == null) 
+                throw new ArgumentException("Некорректное значение параметра");
             else
-                return Subject.CompareTo(subject);
+                return this.Subject.CompareTo(exam.Subject);
         }
 
         public int Compare(Exam? grade1, Exam? grade2)
         {
             if (grade1 is null || grade2 is null) throw new ArgumentException("Некорректное значение параметра");
-            return grade1.Grade - grade2.Grade;
+            return grade2.Grade - grade1.Grade;
         }
     }
 }
