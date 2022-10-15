@@ -11,7 +11,6 @@ namespace LR2
 {
     public class Student : Person, IDateAndCopy
     {
-        private Person student;
         private Education formeducation;
         private int NumberGroup;
         private ArrayList tests = new ArrayList();
@@ -19,21 +18,35 @@ namespace LR2
 
         public Student(Person student, Education formeducation, int numberGroup)
         {
-            this.student = student;
+            this.name = student.Name;
+            this.surname = student.Surname;
+            this.datetime = student.Datetime;
             this.formeducation = formeducation;
             this.NumberGroup = numberGroup;
         }
         public Student()
         {
-            this.student = new Person();
+            var st = new Person();
+            this.name = st.Name;
+            this.surname = st.Surname;
+            this.datetime = st.Datetime;
             this.formeducation = Education.Bachelor;
             this.NumberGroup = 21;
         }
 
         public Person Datastudent
         {
-            get { return student; }
-            set { student = value; }
+            get
+            {
+                Person person = new Person(this.name, this.surname,this.datetime);
+                return person;
+            }
+             
+            set
+            {
+                Person person = new Person(this.name, this.surname, this.datetime);
+                person = value;
+            }
         }
 
         public Education Dataeducation
@@ -91,7 +104,7 @@ namespace LR2
 
         public override object DeepCopy()
         {
-            var student = new Student(this.student, this.formeducation, this.NumberGroup);
+            var student = new Student(new Person(this.name,this.surname,this.datetime), this.formeducation, this.NumberGroup);
 
             foreach (Exam item in this.exams)
             {
@@ -139,7 +152,7 @@ namespace LR2
 
         public override string ToShortString()
         {
-            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}\nСредний балл: {3}", student, formeducation, NumberGroup, Average);
+            return string.Format("\nСтудент: {0}\nФорма обучения: {1}\nНомер группы: {2}\nСредний балл: {3}", new Person(this.name,this.surname,this.datetime), formeducation, NumberGroup, Average);
         }
     }
 }

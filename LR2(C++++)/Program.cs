@@ -20,7 +20,7 @@ student1.AddTests(new Test("Физика", false));
 student1.AddTests(new Test("Литература", true));
 
 
-//второе задание
+//третье задание
 
 Console.WriteLine("3-е задание:");
 Console.WriteLine(student1.Name);
