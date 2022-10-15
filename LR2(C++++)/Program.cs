@@ -54,7 +54,8 @@ foreach (var item in student1.GetResults())
 
 Console.WriteLine();//отступ
 
-Console.WriteLine("7-ое задание:"); Console.WriteLine();
+Console.WriteLine("7-ое задание:"); 
+Console.WriteLine();
 
 foreach (var item in student1.ExamsFilter(3))
     Console.WriteLine(item.ToString());
