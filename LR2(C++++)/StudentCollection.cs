@@ -23,11 +23,13 @@ namespace LR2_C_____
             this.keySelector = keySelector;
         }
 
-        
+        public Dictionary<TKey, Student> Students { get; }
+
+
         public void AddDefaults()
         {
-            Student student1 = new Student(new Person("Самофеева", "Анна", new DateTime(2002, 04, 06)), Education.Bachelor, 100);
-            Student student2 = new Student(new Person("Аверина", "Софья", new DateTime(2002, 03, 05)), Education.Bachelor, 101);
+            Student student1 = new Student(new Person("Анна", "Самофеева", new DateTime(2002, 04, 06)), Education.Bachelor, 100);
+            Student student2 = new Student(new Person("Софья", "Аверина", new DateTime(2002, 03, 05)), Education.Specialist, 101);
 
 
             this.students.Add(keySelector(student1), student1);
@@ -51,13 +53,10 @@ namespace LR2_C_____
             }
         }
 
-        //public IEnumerable<IGrouping<Education, KeyValuePair<TKey, Student>>> GroupFormEducation
-        //{
-        //    get
-        //    {
-
-        //    }
-        //}
+        public IEnumerable<IGrouping<Education, KeyValuePair<TKey, Student>>> GroupFormEducation
+        {
+            get { return students.GroupBy(student => student.Value.Dataeducation); }
+        }
 
         public IEnumerable<KeyValuePair<TKey, Student>> EducationForm(Education value)
         {

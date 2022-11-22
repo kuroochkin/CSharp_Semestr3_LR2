@@ -1,5 +1,6 @@
 ﻿using LR2;
 using LR2_C_____;
+using LR3;
 using System;
 using System.Diagnostics;
 
@@ -40,4 +41,64 @@ stud.AddStudents(student1);
 
 Console.WriteLine(stud.ToString());
 
+Console.WriteLine("3-е задание:");
+
+Console.WriteLine($"Максимальный средний балл экзаменов: {stud.MaxAverage}\n");
+
+Console.WriteLine("Выведем всех бакалавров: \n");
+
+IEnumerable<KeyValuePair<string, Student>> st = stud.EducationForm(Education.Bachelor);
+
+foreach(var item in st)
+{
+    Console.WriteLine(item.Value);
+}
+Console.WriteLine();
+Console.WriteLine("Выполним группировку: \n");
+
+IEnumerable<IGrouping<Education, KeyValuePair<string, Student>>> st1 = stud.GroupFormEducation;
+
+foreach(var it in st1)
+{
+    foreach(var s in it)
+    {
+        Console.WriteLine($"Критерий группировки: {s.Value.Dataeducation} ");
+        Console.WriteLine(s.Value);
+    }
+}
+
+int Value;
+
+while (true)
+{
+    Console.WriteLine("Введите число элементов:");
+    string ValueS = Console.ReadLine();
+    try
+    {
+        if (!int.TryParse(ValueS, out int number))
+        {
+            throw new Exception();
+        }
+        int.TryParse(ValueS, out Value);
+        if (Value < 0)
+        {
+            throw new Exception();
+        }
+        break;
+    }
+    catch (Exception ex)
+    {
+
+        Console.WriteLine("Вы ввели неверное число");
+    }
+    int.TryParse(ValueS, out Value);
+}
+TestCollections<Person, Student> testCollection = new TestCollections<Person, Student>(Value, TestCollections<Person, Student>.Generation);
+testCollection.searchTkeyList();
+Console.WriteLine("\n");
+testCollection.searchstringList();
+Console.WriteLine("\n");
+testCollection.searchdictionaryTKey();
+Console.WriteLine("\n");
+testCollection.searchdictionaryString();
 

@@ -96,7 +96,7 @@ namespace LR2
 
         public override string ToString()
         {
-            return string.Format("Фамилия: {0}\nИмя: {1}\nДата рождения: {2}",  Name, Surname, Datetime);
+            return string.Format("Фамилия: {0}\nИмя: {1}\nДата рождения: {2}",  Surname, Name, Datetime);
         }
 
         public virtual string ToShortString()

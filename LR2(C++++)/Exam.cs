@@ -45,7 +45,7 @@ namespace LR2
             if (subject == null) 
                 throw new ArgumentException("Некорректное значение параметра");
             else
-                return this.Subject.CompareTo(exam.Subject);
+                return this.Subject.CompareTo(exam?.Subject);
         }
 
         public int Compare(Exam? grade1, Exam? grade2)
