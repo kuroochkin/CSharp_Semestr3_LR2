@@ -8,7 +8,7 @@ Console.WriteLine("1-ое задание:"); Console.WriteLine();//отступ
 
 Exam exam1 = new Exam("Электротехника", 3, new DateTime(2022, 06, 06)); // добавим объекты экзаменов
 Exam exam2 = new Exam("Физика", 5, new DateTime(2022, 06, 09));
-Exam exam3 = new Exam("Математика", 4, new DateTime(2022, 06, 12));
+Exam exam3 = new Exam("Математика", 4, new DateTime(2022, 06, 13));
 Exam exam4 = new Exam("Русский язык", 5, new DateTime(2022, 06, 15));
 
 Student student1 = new Student(); // объект типа студент
