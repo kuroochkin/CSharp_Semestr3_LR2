@@ -4,101 +4,68 @@ using LR3;
 using System;
 using System.Diagnostics;
 
-Console.WriteLine("1-ое задание:"); Console.WriteLine();//отступ
 
-Exam exam1 = new Exam("Электротехника", 3, new DateTime(2022, 06, 06)); // добавим объекты экзаменов
-Exam exam2 = new Exam("Физика", 5, new DateTime(2022, 06, 09));
-Exam exam3 = new Exam("Математика", 4, new DateTime(2022, 06, 12));
-Exam exam4 = new Exam("Русский язык", 5, new DateTime(2022, 06, 15));
+StudentCollection<string> collection1 = new StudentCollection<string>(StudentCollection<string>.GiveKey, "Юноши");
+StudentCollection<string> collection2 = new StudentCollection<string>(StudentCollection<string>.GiveKey, "Девушки");
 
-Student student1 = new Student(); // объект типа студент
+Console.WriteLine("2-ое задание: \n");
 
-student1.AddExams(exam1,exam2,exam3,exam4);
+Journal journal = new Journal();
+collection1.StudentsChanged += journal.StudentsChangesHandler;
+collection2.StudentsChanged += journal.StudentsChangesHandler;
 
+Student student1 = new Student(new Person("Влад", "Курочкин", DateTime.Now), Education.Bachelor, 21);
+Student student2 = new Student(new Person("Анна", "Самофеева", DateTime.Now), Education.SecondEducation, 31);
+Student student3 = new Student(new Person("Софья", "Аверина", DateTime.Now), Education.Specialist, 21);
 
-student1.PrintExam();
+List<Student> students = new List<Student>();
+students.Add(student1);
+students.Add(student2);
+students.Add(student3);
 
-student1.SortExamsByName(); Console.WriteLine(); // Сортировка по имени
-
-student1.PrintExam();
-
-student1.SortExamsByGrade(); Console.WriteLine(); // Сортировка по оценке
-
-student1.PrintExam();
-
-student1.SortExamsByDate(); Console.WriteLine(); // Сортировка по дате
-
-student1.PrintExam();
-
-Console.WriteLine();
-
-Console.WriteLine("2-ое задание:"); Console.WriteLine();//отступ
-
-var stud = new StudentCollection<string>(StudentCollection<string>.GiveKey);
-
-stud.AddDefaults();
-stud.AddStudents(student1);
-
-Console.WriteLine(stud.ToString());
-
-Console.WriteLine("3-е задание:");
-
-Console.WriteLine($"Максимальный средний балл экзаменов: {stud.MaxAverage}\n");
-
-Console.WriteLine("Выведем всех бакалавров: \n");
-
-IEnumerable<KeyValuePair<string, Student>> st = stud.EducationForm(Education.Bachelor);
-
-foreach(var item in st)
+foreach(Student item in students)
 {
-    Console.WriteLine(item.Value);
-}
-Console.WriteLine();
-Console.WriteLine("Выполним группировку: \n");
-
-IEnumerable<IGrouping<Education, KeyValuePair<string, Student>>> st1 = stud.GroupFormEducation;
-
-foreach(var it in st1)
-{
-    foreach(var s in it)
-    {
-        Console.WriteLine($"Критерий группировки: {s.Value.Dataeducation} ");
-        Console.WriteLine(s.Value);
-    }
+    item.PropertyChanged += collection1.PropertyChangeded;
 }
 
-int Value;
-
-while (true)
+foreach(Student item in students) // ИЗНАЧАЛЬНЫЙ СПИСОК
 {
-    Console.WriteLine("Введите число элементов:");
-    string ValueS = Console.ReadLine();
-    try
-    {
-        if (!int.TryParse(ValueS, out int number))
-        {
-            throw new Exception();
-        }
-        int.TryParse(ValueS, out Value);
-        if (Value < 0)
-        {
-            throw new Exception();
-        }
-        break;
-    }
-    catch (Exception ex)
-    {
-
-        Console.WriteLine("Вы ввели неверное число");
-    }
-    int.TryParse(ValueS, out Value);
+    Console.WriteLine(item.ToString());
 }
-TestCollections<Person, Student> testCollection = new TestCollections<Person, Student>(Value, TestCollections<Person, Student>.Generation);
-testCollection.searchTkeyList();
-Console.WriteLine("\n");
-testCollection.searchstringList();
-Console.WriteLine("\n");
-testCollection.searchdictionaryTKey();
-Console.WriteLine("\n");
-testCollection.searchdictionaryString();
+
+collection1.AddStudents(student1); // ДОБАВЛЯЕМ В КОЛЛЕКЦИИ
+collection2.AddStudents(student2, student3);
+
+
+student1.DataGroup = 105;
+student1.Dataeducation = Education.SecondEducation; // ИЗМЕНЯЕМ СВОЙСТВА
+
+student2.DataGroup = 120;
+student2.Dataeducation = Education.Specialist;
+
+student3.DataGroup = 140;
+student3.Dataeducation = Education.Specialist;
+
+
+
+collection1.Remove(student2);
+collection2.Remove(student3);
+
+
+
+
+Console.WriteLine(journal.ToString());
+
+
+
+
+
+
+
+
+
+
+
+
+
 

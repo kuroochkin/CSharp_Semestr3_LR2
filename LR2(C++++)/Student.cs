@@ -8,16 +8,27 @@ using System.Runtime.Serialization.Formatters;
 using System.Collections;
 using System.Xml.Linq;
 using LR2_C_____;
+using System.ComponentModel;
 
 namespace LR2
 {
     public delegate TKey KeySelector<TKey>(Student st);
-    public class Student : Person, IDateAndCopy, IComparable
+
+    public enum Action
+    {
+        Add,
+        Remove,
+        Property
+    }
+
+    public class Student : Person, IDateAndCopy, IComparable, INotifyPropertyChanged
     {
         private Education formeducation;
         private int NumberGroup;
         private List<Test> tests = new List<Test>();
         private List<Exam> exams = new List<Exam>();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public Student()
         {
@@ -55,7 +66,11 @@ namespace LR2
         public Education Dataeducation
         {
             get { return formeducation; }
-            set { formeducation = value; }
+            set 
+            { 
+                formeducation = value;
+                ChangeEducationForm("Education");
+            }
         }
 
         public int DataGroup
@@ -68,6 +83,7 @@ namespace LR2
                     throw new ArgumentOutOfRangeException("Ошибка! Значение группы лежит в пределах от 100 до 599.");
                 }
                 NumberGroup = value;
+                ChangeNumberGroup("NumberGroup");
             }
         }
 
@@ -97,14 +113,22 @@ namespace LR2
             }
         }
 
-       
-
         public bool this[Education index]
         {
             get
             {
                 return this.formeducation == index;
             }
+        }
+
+        public void ChangeEducationForm(string name_prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name_prop));
+        }
+
+        public void ChangeNumberGroup(string name_prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name_prop));
         }
 
         public void AddExams(params Exam[] exam)
@@ -148,6 +172,7 @@ namespace LR2
                     yield return exam;
             }
         }
+
 
         public int CompareTo(object? ExamSubject)
         {

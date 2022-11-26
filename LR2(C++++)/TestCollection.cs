@@ -16,6 +16,7 @@ namespace LR3
         private Dictionary<TKey, TValue> dictionaryTKey;
         private Dictionary<string, TValue> dictionaryString;
         private GenerateElement<TKey, TValue> generateMethod;
+
         public TestCollections(int count, GenerateElement<TKey, TValue> method)
         {
             tKeyList = new List<TKey>();

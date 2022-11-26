@@ -4,26 +4,53 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using Action = LR2.Action;
 
 namespace LR2_C_____
 {
-    public class StudentCollection<TKey>
+    public delegate void StudentsChangedHandler<TKey>(object source, StudentsChangedEventArgs<TKey> args);
+
+    public class StudentCollection<TKey> : INotifyPropertyChanged
     {
         private Dictionary<TKey, Student> students;
         private KeySelector<TKey> keySelector;
 
+        public event StudentsChangedHandler<TKey> StudentsChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public StudentCollection(KeySelector<TKey> keySelector)
+        public Dictionary<TKey, Student> Students { get; set; }
+
+        public string NameCollection { get; set; }
+
+        public StudentCollection(KeySelector<TKey> keySelector, string NameCollection)
         {
             this.students = new Dictionary<TKey, Student>();
             this.keySelector = keySelector;
+            this.NameCollection = NameCollection;
         }
 
-        public Dictionary<TKey, Student> Students { get; }
+        public bool Remove(Student st)
+        {
+            if (students.ContainsValue(st))
+            {
+                foreach (KeyValuePair<TKey, Student> item in students)
+                {
+                    if (item.Value == st)
+                    {
+                        StudentPropertyChanged(Action.Remove, "Удаление", item.Key);
+                        st.PropertyChanged -= PropertyChangeded;
+                        break;
+                    }
+                }
+                return true;
+            }
+            else return false;
+        }
 
 
         public void AddDefaults()
@@ -41,7 +68,18 @@ namespace LR2_C_____
             foreach(Student item in _students)
             {
                 students.Add(keySelector(item),item);
+                StudentsChanged(this, new StudentsChangedEventArgs<TKey>(NameCollection, Action.Add, "Добавление Студента", keySelector(item)));
             }
+        }
+
+        private void StudentPropertyChanged(Action action, string name, TKey key)
+        {
+            StudentsChanged?.Invoke(this, new StudentsChangedEventArgs<TKey>(NameCollection, action, name, key));
+        }
+
+        public void PropertyChangeded(object student, PropertyChangedEventArgs args)
+        {
+            StudentPropertyChanged(Action.Property, args.PropertyName, keySelector((Student)student));
         }
 
         public double MaxAverage
@@ -51,6 +89,11 @@ namespace LR2_C_____
                 if (students.Count == 0) return -1;
                 return students.Max(student => student.Value.Average);
             }
+        }
+        public IEnumerable GetList()
+        {
+            foreach (var item in students.Values)
+                yield return item;
         }
 
         public IEnumerable<IGrouping<Education, KeyValuePair<TKey, Student>>> GroupFormEducation
