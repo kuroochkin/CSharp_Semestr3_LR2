@@ -48,6 +48,7 @@ student3.Dataeducation = Education.Specialist;
 
 collection1.Remove(student1);
 collection2.Remove(student3);
+collection2.Remove(student3);
 
 student1.DataGroup = 105;
 student1.Dataeducation = Education.SecondEducation;
