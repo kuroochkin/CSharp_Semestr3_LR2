@@ -23,12 +23,12 @@ students.Add(student1);
 students.Add(student2);
 students.Add(student3);
 
-foreach(Student item in students)
-{
-    item.PropertyChanged += collection1.PropertyChangeded;
-}
+student1.PropertyChanged += collection1.PropertyChangeded;
+student2.PropertyChanged += collection2.PropertyChangeded;
+student3.PropertyChanged += collection2.PropertyChangeded;
 
-foreach(Student item in students) // ИЗНАЧАЛЬНЫЙ СПИСОК
+
+foreach (Student item in students) // ИЗНАЧАЛЬНЫЙ СПИСОК
 {
     Console.WriteLine(item.ToString());
 }
@@ -46,13 +46,14 @@ student2.Dataeducation = Education.Specialist;
 student3.DataGroup = 140;
 student3.Dataeducation = Education.Specialist;
 
-
-
-collection1.Remove(student2);
+collection1.Remove(student1);
 collection2.Remove(student3);
 
+student1.DataGroup = 105;
+student1.Dataeducation = Education.SecondEducation;
 
-
+student3.DataGroup = 140;
+student3.Dataeducation = Education.Specialist;
 
 Console.WriteLine(journal.ToString());
 

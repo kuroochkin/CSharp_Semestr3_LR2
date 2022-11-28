@@ -40,10 +40,11 @@ namespace LR2_C_____
             {
                 foreach (KeyValuePair<TKey, Student> item in students)
                 {
-                    if (item.Value == st)
+                    if (item.Value.Equals == st.Equals)
                     {
                         StudentPropertyChanged(Action.Remove, "Удаление", item.Key);
                         st.PropertyChanged -= PropertyChangeded;
+                        students.Remove(item.Key);
                         break;
                     }
                 }
