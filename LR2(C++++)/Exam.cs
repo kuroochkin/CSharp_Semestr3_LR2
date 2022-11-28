@@ -13,6 +13,8 @@ namespace LR2
         Bachelor,
         SecondEducation
     }
+
+    [Serializable]
     public class Exam : IDateAndCopy, IComparable, IComparer<Exam>
     {
         public string Subject { get; set; }

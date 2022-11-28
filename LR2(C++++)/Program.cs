@@ -3,60 +3,50 @@ using LR2_C_____;
 using LR3;
 using System;
 using System.Diagnostics;
+using static System.Formats.Asn1.AsnWriter;
 
 
-StudentCollection<string> collection1 = new StudentCollection<string>(StudentCollection<string>.GiveKey, "Юноши");
-StudentCollection<string> collection2 = new StudentCollection<string>(StudentCollection<string>.GiveKey, "Девушки");
+Student student = new Student();
+student.AddExams(new Exam());
 
-Console.WriteLine("2-ое задание: \n");
+var studentcopy = student.DeepCopy();
 
-Journal journal = new Journal();
-collection1.StudentsChanged += journal.StudentsChangesHandler;
-collection2.StudentsChanged += journal.StudentsChangesHandler;
+Console.WriteLine(student);
+Console.WriteLine(studentcopy);
 
-Student student1 = new Student(new Person("Влад", "Курочкин", DateTime.Now), Education.Bachelor, 21);
-Student student2 = new Student(new Person("Анна", "Самофеева", DateTime.Now), Education.SecondEducation, 31);
-Student student3 = new Student(new Person("Софья", "Аверина", DateTime.Now), Education.Specialist, 21);
-
-List<Student> students = new List<Student>();
-students.Add(student1);
-students.Add(student2);
-students.Add(student3);
-
-student1.PropertyChanged += collection1.PropertyChangeded;
-student2.PropertyChanged += collection2.PropertyChangeded;
-student3.PropertyChanged += collection2.PropertyChangeded;
-
-
-foreach (Student item in students) // ИЗНАЧАЛЬНЫЙ СПИСОК
+Console.WriteLine("Введите имя файла: ");
+string filename;
+do
 {
-    Console.WriteLine(item.ToString());
+    filename = Console.ReadLine();
+} 
+while (filename.Length < 1);
+var fi = new FileInfo(filename);
+if (fi.Exists)
+{
+    studentcopy.Load(filename);
+    Console.WriteLine("Загруженный объект:");
+    Console.WriteLine(studentcopy);
+}
+else
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("Файл не найден!");
+    fi.Create().Close();
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("Мы создали новый файл.");
+    Console.ResetColor();
 }
 
-collection1.AddStudents(student1); // ДОБАВЛЯЕМ В КОЛЛЕКЦИИ
-collection2.AddStudents(student2, student3);
+studentcopy.AddFromConsole();
+studentcopy.Save(filename);
+Console.WriteLine(studentcopy);
 
-
-student1.DataGroup = 105;
-student1.Dataeducation = Education.SecondEducation; // ИЗМЕНЯЕМ СВОЙСТВА
-
-student2.DataGroup = 120;
-student2.Dataeducation = Education.Specialist;
-
-student3.DataGroup = 140;
-student3.Dataeducation = Education.Specialist;
-
-collection1.Remove(student1);
-collection2.Remove(student3);
-collection2.Remove(student3);
-
-student1.DataGroup = 105;
-student1.Dataeducation = Education.SecondEducation;
-
-student3.DataGroup = 140;
-student3.Dataeducation = Education.Specialist;
-
-Console.WriteLine(journal.ToString());
+Student.Load(filename, studentcopy);
+studentcopy.AddFromConsole();
+Console.WriteLine("Результат:");
+Student.Save(filename, studentcopy);
+Console.WriteLine(studentcopy);
 
 
 

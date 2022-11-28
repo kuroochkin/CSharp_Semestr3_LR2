@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 namespace LR2
 {
+    [Serializable]
     public class Person : IDateAndCopy
     {
         protected string name;

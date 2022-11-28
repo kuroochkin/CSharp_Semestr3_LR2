@@ -9,6 +9,8 @@ using System.Collections;
 using System.Xml.Linq;
 using LR2_C_____;
 using System.ComponentModel;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace LR2
 {
@@ -20,7 +22,8 @@ namespace LR2
         Remove,
         Property
     }
-
+   
+    [Serializable]
     public class Student : Person, IDateAndCopy, IComparable, INotifyPropertyChanged
     {
         private Education formeducation;
@@ -121,6 +124,7 @@ namespace LR2
             }
         }
 
+
         public void ChangeEducationForm(string name_prop)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name_prop));
@@ -141,19 +145,142 @@ namespace LR2
 
         public void AddTests(Test test) => tests.Add(test);
 
-        public override object DeepCopy()
-        {
-            var student = new Student(new Person(this.name, this.surname, this.datetime), this.formeducation, this.NumberGroup);
 
-            foreach (Exam item in this.exams)
+
+        public override Student DeepCopy()
+        {
+            try
             {
-                student.AddExams(item);
+                MemoryStream stream = new MemoryStream();
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (Student)formatter.Deserialize(stream);
             }
-            foreach (Test item in this.tests)
+            catch
             {
-                student.AddTests(item);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Объекты не равны!");
+                Console.ResetColor();
+                return new Student();
             }
-            return student;
+
+        }
+
+        public bool Save(string filename)
+        {
+            try
+            {
+                var format = new BinaryFormatter();
+                using (var filestream = new FileStream(filename, FileMode.OpenOrCreate))
+                {
+                    format.Serialize(filestream, this);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+        public static bool Save(string filename, Student obj)
+        {
+            try
+            {
+                var format = new BinaryFormatter();
+                using (var filestream = new FileStream(filename, FileMode.OpenOrCreate))
+                {
+                    format.Serialize(filestream, obj);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error in static Save");
+                Console.WriteLine(e.Message);
+                Console.ResetColor();
+                return false;
+            }
+        }
+
+        public bool Load(string filename)
+        {
+            try
+            {
+                var formatter = new BinaryFormatter();
+                using (var fs = new FileStream(filename, FileMode.OpenOrCreate))
+                {
+                    var deserialize = (Student)formatter.Deserialize(fs);
+                    name = deserialize.name;
+                    surname = deserialize.surname;
+                    datetime = deserialize.datetime;
+                    formeducation = deserialize.formeducation;
+                    NumberGroup = deserialize.NumberGroup;
+                    tests.Clear();
+                    tests.AddRange(deserialize.tests);
+                    exams.Clear();
+                    exams.AddRange(deserialize.exams);
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool Load(string filename, Student obj)
+        {
+            try
+            {
+                var formatter = new BinaryFormatter();
+                using (var fs = new FileStream(filename, FileMode.OpenOrCreate))
+                {
+                    var deserialize = (Student)formatter.Deserialize(fs);
+                    obj.name = deserialize.name;
+                    obj.surname = deserialize.surname;
+                    obj.datetime = deserialize.datetime;
+                    obj.formeducation = deserialize.formeducation;
+                    obj.NumberGroup = deserialize.NumberGroup;
+                    obj.tests.Clear();
+                    obj.tests.AddRange(deserialize.tests);
+                    obj.exams.Clear();
+                    obj.exams.AddRange(deserialize.exams);
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool AddFromConsole()
+        {
+            try
+            {
+                Console.WriteLine(
+                    "Введите информацию о экзамене:\n" +
+                    "Предмет-Оценка-Число экзамена-Месяц экзамена-Год экзамена"
+                );
+                string[] words = Console.ReadLine().Split('-', StringSplitOptions.RemoveEmptyEntries);
+                var exam = new Exam(words[0], Convert.ToInt32(words[1]), new DateTime(Convert.ToInt32(words[2]), Convert.ToInt32(words[3]), Convert.ToInt32(words[4])));
+                exams.Add(exam);
+                return true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input");
+                Console.ResetColor();
+                return false;
+            }
+
         }
         public IEnumerable GetResults()
         {
