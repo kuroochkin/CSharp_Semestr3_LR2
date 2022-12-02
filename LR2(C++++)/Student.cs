@@ -266,7 +266,7 @@ namespace LR2
             {
                 Console.WriteLine(
                     "Введите информацию о экзамене:\n" +
-                    "Предмет-Оценка-Число экзамена-Месяц экзамена-Год экзамена"
+                    "Предмет-Оценка-Год экзамена-Месяц экзамена-Число экзамена"
                 );
                 string[] words = Console.ReadLine().Split('-', StringSplitOptions.RemoveEmptyEntries);
                 var exam = new Exam(words[0], Convert.ToInt32(words[1]), new DateTime(Convert.ToInt32(words[2]), Convert.ToInt32(words[3]), Convert.ToInt32(words[4])));

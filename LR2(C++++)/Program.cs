@@ -22,6 +22,7 @@ do
 } 
 while (filename.Length < 1);
 var fi = new FileInfo(filename);
+
 if (fi.Exists)
 {
     studentcopy.Load(filename);
