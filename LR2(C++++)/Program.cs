@@ -9,7 +9,7 @@ using static System.Formats.Asn1.AsnWriter;
 Student student = new Student();
 student.AddExams(new Exam());
 
-var studentcopy = student.DeepCopy();
+var studentcopy = student.DeepCopy(); // Создание копии
 
 Console.WriteLine(student);
 Console.WriteLine(studentcopy);
@@ -20,10 +20,10 @@ do
 {
     filename = Console.ReadLine();
 } 
-while (filename.Length < 1);
+while (filename.Length < 1); // Ждем ввода каких-то данных
 var fi = new FileInfo(filename);
 
-if (fi.Exists)
+if (fi.Exists) // Проверка на существование файла
 {
     studentcopy.Load(filename);
     Console.WriteLine("Загруженный объект:");
@@ -31,20 +31,18 @@ if (fi.Exists)
 }
 else
 {
-    Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine("Файл не найден!");
     fi.Create().Close();
-    Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine("Мы создали новый файл.");
-    Console.ResetColor();
 }
 
-studentcopy.AddFromConsole();
-studentcopy.Save(filename);
-Console.WriteLine(studentcopy);
+studentcopy.AddFromConsole(); // Добавляем экзамен
+studentcopy.Save(filename); // Сохраняем в файл
+Console.WriteLine(studentcopy); // Выводим данные студента
 
 Student.Load(filename, studentcopy);
 studentcopy.AddFromConsole();
+Console.WriteLine();
 Console.WriteLine("Результат:");
 Student.Save(filename, studentcopy);
 Console.WriteLine(studentcopy);

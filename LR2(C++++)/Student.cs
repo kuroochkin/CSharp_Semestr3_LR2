@@ -153,15 +153,13 @@ namespace LR2
             {
                 MemoryStream stream = new MemoryStream();
                 IFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this);
-                stream.Seek(0, SeekOrigin.Begin);
+                formatter.Serialize(stream, this); 
+                stream.Seek(0, SeekOrigin.Begin); //  Устанавливает позицию в потоке
                 return (Student)formatter.Deserialize(stream);
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Объекты не равны!");
-                Console.ResetColor();
                 return new Student();
             }
 
@@ -191,7 +189,7 @@ namespace LR2
             try
             {
                 var format = new BinaryFormatter();
-                using (var filestream = new FileStream(filename, FileMode.OpenOrCreate))
+                using (var filestream = new FileStream(filename, FileMode.OpenOrCreate)) //если файл существует, он открывается, если нет - создается новый
                 {
                     format.Serialize(filestream, obj);
                 }
@@ -200,10 +198,8 @@ namespace LR2
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error in static Save");
+                Console.WriteLine("Ошибка в статическом методе!");
                 Console.WriteLine(e.Message);
-                Console.ResetColor();
                 return false;
             }
         }
@@ -213,18 +209,19 @@ namespace LR2
             try
             {
                 var formatter = new BinaryFormatter();
-                using (var fs = new FileStream(filename, FileMode.OpenOrCreate))
+                using (var fs = new FileStream(filename, FileMode.OpenOrCreate)) //если файл существует, он открывается, если нет - создается новый
                 {
                     var deserialize = (Student)formatter.Deserialize(fs);
+                    
                     name = deserialize.name;
                     surname = deserialize.surname;
                     datetime = deserialize.datetime;
                     formeducation = deserialize.formeducation;
                     NumberGroup = deserialize.NumberGroup;
                     tests.Clear();
-                    tests.AddRange(deserialize.tests);
+                    tests.AddRange(deserialize.tests); //Добавляет элементы указанной коллекции в конец списка List<T>.
                     exams.Clear();
-                    exams.AddRange(deserialize.exams);
+                    exams.AddRange(deserialize.exams); //Добавляет элементы указанной коллекции в конец списка List<T>.
                     return true;
                 }
             }
@@ -275,9 +272,7 @@ namespace LR2
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid input");
-                Console.ResetColor();
+                Console.WriteLine("Введите правильно!");
                 return false;
             }
 
